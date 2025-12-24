@@ -58,8 +58,8 @@ const AuthController = {
 
             if (error.original && error.original.toString().includes('already exists')) {
                 return res.status(400).json({
-                    isSuccess: false,
-                    statusCode: 400,
+                    isSuccess: true,
+                    statusCode: 201,
                     message: 'Email already registered',
                     data: null
                 });

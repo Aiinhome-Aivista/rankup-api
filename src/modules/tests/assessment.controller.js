@@ -5,10 +5,13 @@ const TestQuestionMap = require('./test_questions_map.model');
 const StudentProfile = require('../users/student_profile.model');
 const User = require('../users/user.model');
 
+
 const AssessmentController = {
+
 
     createAssessment: async (req, res) => {
         const t = await sequelize.transaction();
+
 
         try {
             const {
@@ -18,7 +21,9 @@ const AssessmentController = {
                 status, assignType, studentIds, topicId
             } = req.body;
 
+
             console.log("\n====== STARTING NEW ASSESSMENT CREATION ======");
+
 
             // 1. Find Students
             let targetStudentIds = [];
@@ -33,15 +38,18 @@ const AssessmentController = {
                 targetStudentIds = students.map(s => s.student_id);
             }
 
+
             if (targetStudentIds.length === 0) {
                 await t.rollback();
                 return res.status(404).json({ isSuccess: false, message: "No active students found." });
             }
             console.log(`Step 1: Found ${targetStudentIds.length} Students (IDs: ${targetStudentIds})`);
 
+
             // 2. Find Questions
             const questionFilter = { subject_id: subjectId, class_grade: classGrade, difficulty_level: difficulty };
             if (topicId && topicId !== 'all') questionFilter.topic_id = topicId;
+
 
             const questions = await Question.findAll({
                 where: questionFilter,
@@ -51,17 +59,21 @@ const AssessmentController = {
                 transaction: t
             });
 
+
             if (questions.length === 0) {
                 await t.rollback();
                 return res.status(404).json({ isSuccess: false, message: "Not enough questions found." });
             }
 
+
             const questionIdsList = questions.map(q => q.question_id);
             console.log(`Step 2: Selected Questions: [${questionIdsList}]`);
+
 
             // 3. Create Tests & Prepare Map Data
             let allMapEntries = [];
             let createdTestIds = [];
+
 
             for (const studentId of targetStudentIds) {
                 const newTest = await Test.create({
@@ -82,7 +94,9 @@ const AssessmentController = {
                     status: status || 'published'
                 }, { transaction: t });
 
+
                 createdTestIds.push(newTest.test_id);
+
 
                 // Map Questions to this NEW Test ID
                 const studentMapEntries = questionIdsList.map(qId => ({
@@ -90,11 +104,14 @@ const AssessmentController = {
                     question_id: qId
                 }));
 
+
                 allMapEntries.push(...studentMapEntries);
             }
 
+
             console.log(`Step 3: Created Tests IDs: [${createdTestIds}]`);
             console.log(`Step 4: Inserting ${allMapEntries.length} rows into test_questions_map...`);
+
 
             // 4. BULK INSERT into Map Table
             if (allMapEntries.length > 0) {
@@ -102,8 +119,10 @@ const AssessmentController = {
                 console.log("✅ Map Insertion Successful");
             }
 
+
             await t.commit();
             console.log("====== FINISHED ======\n");
+
 
             return res.json({
                 statusCode: 200,
@@ -116,6 +135,7 @@ const AssessmentController = {
                 }
             });
 
+
         } catch (error) {
             await t.rollback();
             console.error("❌ ERROR:", error);
@@ -124,4 +144,8 @@ const AssessmentController = {
     }
 };
 
+
 module.exports = AssessmentController;
+
+
+

@@ -1,66 +1,94 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
 
+
 const User = sequelize.define('User', {
     user_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
+    keycloak_id: {
+        type: DataTypes.STRING(255),
+        unique: true,
+        allowNull: true
+    },
     full_name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false
     },
     email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         unique: true,
         validate: { isEmail: true }
     },
+    phone_number: {
+        type: DataTypes.STRING(14),
+        allowNull: true,
+        unique: true
+    },
     password_hash: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: true
     },
+    // --- UPDATED ROLE FIELD ---
     role: {
         type: DataTypes.ENUM('parent', 'student', 'admin', 'teacher'),
-        defaultValue: 'student'
+        allowNull: false,
+        set(value) {
+            // Automatically converts 'Student' -> 'student' before validation
+            if (value && typeof value === 'string') {
+                this.setDataValue('role', value.toLowerCase());
+            } else {
+                this.setDataValue('role', value);
+            }
+        }
     },
-    keycloak_id: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: true
-    },
+    // --------------------------
     is_active: {
         type: DataTypes.INTEGER,
         defaultValue: 1
     },
-    // --- ADD THESE TWO COLUMNS ---
+    subscription_plan: {
+        type: DataTypes.ENUM('free', 'premium', 'basic'),
+        defaultValue: 'free'
+    },
     otp_code: {
         type: DataTypes.STRING(10),
         allowNull: true
     },
     otp_expiry: {
-        type: DataTypes.DATE, // Use DATE for timestamps
+        type: DataTypes.DATE,
         allowNull: true
     },
-    // -----------------------------
-    // --- ADD THIS Institute Registration---
+    gender: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    refresh_token: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
     institute_id: {
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    auth_provider: {
+        type: DataTypes.STRING(50),
+        defaultValue: 'local'
     }
-
 }, {
     tableName: 'users',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: false, // Ensure this matches your DB (if you don't have updated_at column, keep false)
-    defaultScope: {
-        attributes: { exclude: ['password_hash'] }
-    },
-    scopes: {
-        withPassword: { attributes: {} }
-    }
+    updatedAt: false,
+    defaultScope: { attributes: { exclude: ['password_hash'] } },
+    scopes: { withPassword: { attributes: {} } }
 });
 
+
 module.exports = User;
+
+
+
