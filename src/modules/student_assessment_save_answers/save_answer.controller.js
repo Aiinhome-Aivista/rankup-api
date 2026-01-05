@@ -73,7 +73,10 @@ const SaveAnswerController = {
 
         } catch (error) {
             console.error("Save Answer Error:", error);
-            res.status(500).json({ isSuccess: false, message: error.message });
+            res.status(500).json({ 
+                isSuccess: false, 
+                message: error.message 
+            });
         }
     }
 };

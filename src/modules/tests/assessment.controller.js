@@ -41,7 +41,10 @@ const AssessmentController = {
 
             if (targetStudentIds.length === 0) {
                 await t.rollback();
-                return res.status(404).json({ isSuccess: false, message: "No active students found." });
+                return res.status(404).json({ 
+                    isSuccess: false, 
+                    message: "No active students found." 
+                });
             }
             console.log(`Step 1: Found ${targetStudentIds.length} Students (IDs: ${targetStudentIds})`);
 
@@ -62,7 +65,10 @@ const AssessmentController = {
 
             if (questions.length === 0) {
                 await t.rollback();
-                return res.status(404).json({ isSuccess: false, message: "Not enough questions found." });
+                return res.status(404).json({ 
+                    isSuccess: false, 
+                    message: "Not enough questions found." 
+                });
             }
 
 
@@ -116,7 +122,7 @@ const AssessmentController = {
             // 4. BULK INSERT into Map Table
             if (allMapEntries.length > 0) {
                 await TestQuestionMap.bulkCreate(allMapEntries, { transaction: t });
-                console.log("✅ Map Insertion Successful");
+                console.log(" Map Insertion Successful");
             }
 
 
@@ -138,8 +144,12 @@ const AssessmentController = {
 
         } catch (error) {
             await t.rollback();
-            console.error("❌ ERROR:", error);
-            res.status(500).json({ isSuccess: false, message: error.message });
+            console.error(" ERROR:", error);
+            res.status(500).json({ 
+                isSuccess: false, 
+                message: error.message,
+                error: error.message 
+            });
         }
     }
 };

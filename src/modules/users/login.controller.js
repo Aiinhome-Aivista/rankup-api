@@ -145,7 +145,8 @@ const LoginController = {
             return res.status(500).json({
                 isSuccess: false,
                 statusCode: 500,
-                message: 'Verification failed'
+                message: 'Verification failed',
+                error: error.message
             });
         }
     }

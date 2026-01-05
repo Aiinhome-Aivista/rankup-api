@@ -26,7 +26,10 @@ const SubmitTestController = {
 
 
             if (!attemptId) {
-                return res.status(400).json({ isSuccess: false, message: "attemptId is required" });
+                return res.status(400).json({ 
+                    isSuccess: false, 
+                    message: "attemptId is required" 
+                });
             }
 
 
@@ -50,7 +53,10 @@ const SubmitTestController = {
 
 
             if (!attempt) {
-                return res.status(404).json({ isSuccess: false, message: "Test Attempt not found" });
+                return res.status(404).json({ 
+                    isSuccess: false, 
+                    message: "Test Attempt not found" 
+                });
             }
 
 
@@ -128,7 +134,11 @@ const SubmitTestController = {
 
         } catch (error) {
             console.error("Submit Test Error:", error);
-            res.status(500).json({ isSuccess: false, message: "Failed to submit test", data: error.message });
+            res.status(500).json({ 
+                isSuccess: false, 
+                message: "Failed to submit test", 
+                data: error.message 
+            });
         }
     }
 };

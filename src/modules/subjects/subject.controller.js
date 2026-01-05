@@ -18,7 +18,8 @@ exports.getSubjectsController = async (req, res) => {
       isSuccess: false,
       statusCode: 500,
       message: "Failed to fetch subjects",
-      data: null
+      data: null,
+      error: error.message
     });
   }
 };
