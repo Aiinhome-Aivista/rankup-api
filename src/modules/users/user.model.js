@@ -90,15 +90,8 @@
 
 // module.exports = User;
 
-
-
-
-
-
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-
 
 const User = sequelize.define('User', {
     user_id: {
@@ -120,6 +113,14 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING(255),
         allowNull: true
     },
+    // ADD THIS NEW FIELD
+    fcm_token: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        defaultValue: null
+    },
+
+
     // --- CRITICAL FIX: Match DB Capitalization (Admin, Teacher, etc.) ---
     role: {
         type: DataTypes.ENUM('Parent', 'Student', 'Admin', 'Teacher'),
@@ -154,10 +155,5 @@ const User = sequelize.define('User', {
     scopes: { withPassword: { attributes: {} } }
 });
 
-
 module.exports = User;
-
-
-
-
 
