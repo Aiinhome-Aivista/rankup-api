@@ -53,9 +53,13 @@ const childRoutes = require('./modules/users/child.routes');
 const subjectRoutes = require("./modules/subjects/subject.routes");
 const assessmentRoutes = require('./modules/tests/assessment.routes');
 const instituteRoutes = require('./modules/institute/institute.routes');
+const aiRemedialRoutes = require('./modules/assessment/AIRemedial.routes');
+const assessmentPdfRoutes = require('./modules/assessment/assessment_pdf.routes');
 const submitTestRoutes = require('./modules/submit_test_all_aswers/submit.routes');
+const selfAssessmentRoutes = require('./modules/self_assessment/self_assessment.routes');
 const saveAnswerRoutes = require('./modules/student_assessment_save_answers/save_answer.routes');
 const studentAssessmentRoutes = require('./modules/student_assessment/student_assessment.routes');
+const notificationRoutes = require('./modules/notifications/notification.routes');
 
 
 const app = express();
@@ -76,8 +80,13 @@ app.use('/v1/institute', instituteRoutes);
 app.use("/v1/get_subjects", subjectRoutes);
 app.use('/v1/assessment', assessmentRoutes);
 app.use('/v1/submit_test', submitTestRoutes);
+app.use('/v1/assessment', assessmentPdfRoutes);
+app.use('/v1/retake_assessment', aiRemedialRoutes);
+app.use('/v1/self_assessment', selfAssessmentRoutes);
 app.use('/v1/student_assessment_save', saveAnswerRoutes);
 app.use('/v1/student_assessment', studentAssessmentRoutes);
+app.use('/v1/notifications', notificationRoutes);
+
 
 
 const PORT = process.env.PORT || 3019;

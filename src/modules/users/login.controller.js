@@ -33,7 +33,7 @@ const LoginController = {
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
             const now = new Date();
-            const expiryTime = new Date(now.getTime() + 15 * 60000);
+            const expiryTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
 
             user.otp_code = otp;
             user.otp_expiry = expiryTime;
