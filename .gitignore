@@ -1,4 +1,3 @@
 node_modules
 src/config/serviceAccountKey.json
 .env
-all
